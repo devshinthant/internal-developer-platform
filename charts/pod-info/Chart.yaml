@@ -1,0 +1,7 @@
+apiVersion: v2
+name: podinfo-wrapper
+version: 0.1.0
+dependencies:
+  - name: podinfo
+    version: 6.8.0
+    repository: https://stefanprodan.github.io/podinfo
