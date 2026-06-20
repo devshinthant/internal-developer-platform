@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/devshinthant/internal-developer-platform.git
     targetRevision: main
-    path: internal-developer-platform/charts/nginx-demo
+    path: charts/nginx-demo
   destination:
     server: https://kubernetes.default.svc
     namespace: applications
