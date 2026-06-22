@@ -1,0 +1,14 @@
+{
+  "name": "node-api",
+  "version": "0.1.0",
+  "description": "Small Node.js API used as the first golden-path service template.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
