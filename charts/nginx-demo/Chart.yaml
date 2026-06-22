@@ -1,9 +1,0 @@
-apiVersion: v2
-name: nginx-demo
-description: Wrapper chart for deploying nginx through Argo CD
-type: application
-version: 0.1.0
-dependencies:
-  - name: nginx
-    version: 18.3.5
-    repository: https://charts.bitnami.com/bitnami
