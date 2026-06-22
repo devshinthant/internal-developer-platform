@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: helm-guestbook
+  name: podinfo-2
   namespace: argo-cd
 spec:
   project: default
   source:
-    repoURL: https://github.com/argoproj/argocd-example-apps.git
-    targetRevision: master
-    path: helm-guestbook
+    repoURL: https://github.com/devshinthant/internal-developer-platform.git
+    targetRevision: main
+    path: charts/pod-info-2
   destination:
     server: https://kubernetes.default.svc
     namespace: applications
