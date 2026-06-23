@@ -83,33 +83,33 @@ jobs:
 
           mkdir -p previews/node-api
 
-          cat > "previews/node-api/pr-${PR_NUMBER}.yaml" <<EOF
-            apiVersion: argoproj.io/v1alpha1
-            kind: Application
-            metadata:
-              name: ${PREVIEW_NAME}
-              namespace: argo-cd
-            spec:
-              project: default
-              source:
-                repoURL: https://github.com/devshinthant/internal-developer-platform.git
-                targetRevision: main
-                path: charts/node-api
-                helm:
-                  values: |
-                    image:
-                      tag: ${IMAGE_TAG}
-                    replicaCount: 1
-              destination:
-                server: https://kubernetes.default.svc
-                namespace: ${PREVIEW_NAMESPACE}
-              syncPolicy:
-                automated:
-                  prune: true
-                  selfHeal: true
-                syncOptions:
-                  - CreateNamespace=true
-            EOF
+          {
+            echo "apiVersion: argoproj.io/v1alpha1"
+            echo "kind: Application"
+            echo "metadata:"
+            echo "  name: ${PREVIEW_NAME}"
+            echo "  namespace: argo-cd"
+            echo "spec:"
+            echo "  project: default"
+            echo "  source:"
+            echo "    repoURL: https://github.com/devshinthant/internal-developer-platform.git"
+            echo "    targetRevision: main"
+            echo "    path: charts/node-api"
+            echo "    helm:"
+            echo "      values: |"
+            echo "        image:"
+            echo "          tag: ${IMAGE_TAG}"
+            echo "        replicaCount: 1"
+            echo "  destination:"
+            echo "    server: https://kubernetes.default.svc"
+            echo "    namespace: ${PREVIEW_NAMESPACE}"
+            echo "  syncPolicy:"
+            echo "    automated:"
+            echo "      prune: true"
+            echo "      selfHeal: true"
+            echo "    syncOptions:"
+            echo "      - CreateNamespace=true"
+          } > "previews/node-api/pr-${PR_NUMBER}.yaml"
 
       - name: Commit preview application
         run: |
