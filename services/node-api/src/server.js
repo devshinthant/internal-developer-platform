@@ -63,7 +63,8 @@ export function createServer() {
     if (path === "/say-my-name") {
       json(res,200, {
         message: "Shin Thant"
-      })
+      });
+      return;
     }
 
     json(res, 404, { error: "not_found" });
