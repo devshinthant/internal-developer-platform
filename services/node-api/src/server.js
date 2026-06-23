@@ -60,6 +60,12 @@ export function createServer() {
       return;
     }
 
+    if (path === "/say-my-name") {
+      json(res,200, {
+        message: "Shin Thant"
+      })
+    }
+
     json(res, 404, { error: "not_found" });
   });
 }
