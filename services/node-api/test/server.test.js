@@ -45,4 +45,14 @@ describe("node-api", () => {
     assert.match(body, /node_api_uptime_seconds/);
     assert.match(body, /node_api_info/);
   });
+
+
+  it("exposes test endpoint", async () => {
+    const response = await fetch(`${baseUrl}/say-my-name`);
+    const body = await response.text();
+
+    assert.equal(response.status, 200);
+    assert.match(body, /node_api_uptime_seconds/);
+    assert.match(body, /node_api_info/);
+  });
 });
