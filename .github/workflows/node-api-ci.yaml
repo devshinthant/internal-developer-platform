@@ -7,10 +7,6 @@ on:
     paths:
       - services/node-api/**
       - .github/workflows/node-api-ci.yaml
-  pull_request:
-    paths:
-      - services/node-api/**
-      - .github/workflows/node-api-ci.yaml
 
 permissions:
   contents: read
