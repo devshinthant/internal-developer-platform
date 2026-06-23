@@ -11,7 +11,7 @@ on:
       - .github/workflows/node-api-preview.yaml
 
 permissions:
-  contents: read
+  contents: write
   packages: write
   pull-requests: read
 
