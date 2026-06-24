@@ -11,6 +11,10 @@ on:
       - services/node-api/**
       - .github/workflows/node-api-preview.yaml
 
+concurrency:
+  group: node-api-preview-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
   packages: write
@@ -90,6 +94,8 @@ jobs:
             echo "metadata:"
             echo "  name: ${PREVIEW_NAME}"
             echo "  namespace: argo-cd"
+            echo "  finalizers:"
+            echo "    - resources-finalizer.argocd.argoproj.io"
             echo "spec:"
             echo "  project: default"
             echo "  source:"
@@ -125,4 +131,5 @@ jobs:
           fi
 
           git commit -m "Update node-api preview for PR #${{ github.event.pull_request.number }}"
+          git pull --rebase origin main
           git push origin HEAD:main
