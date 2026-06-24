@@ -6,6 +6,7 @@ on:
       - opened
       - synchronize
       - reopened
+    
     paths:
       - services/node-api/**
       - .github/workflows/node-api-preview.yaml

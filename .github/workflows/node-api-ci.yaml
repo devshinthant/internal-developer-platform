@@ -62,11 +62,3 @@ jobs:
           tags: |
             ${{ env.IMAGE_NAME }}:main
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
-
-      - name: Build Docker image for pull requests
-        if: github.event_name == 'pull_request'
-        uses: docker/build-push-action@v6
-        with:
-          context: services/node-api
-          push: false
-          tags: ${{ env.IMAGE_NAME }}:pr-${{ github.event.pull_request.number }}
