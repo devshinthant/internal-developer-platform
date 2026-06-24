@@ -5,9 +5,6 @@ image:
   tag: main
   pullPolicy: Always
 
-imagePullSecrets:
-  - name: ghcr-pull-secret
-
 service:
   type: ClusterIP
   port: 80

@@ -37,4 +37,5 @@ jobs:
           fi
 
           git commit -m "Remove node-api preview for PR #${{ github.event.pull_request.number }}"
+          git pull --rebase origin main
           git push origin HEAD:main
