@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: node-api
+        environment: dev
     spec:
       containers:
         - name: node-api
