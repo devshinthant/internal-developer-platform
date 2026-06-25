@@ -12,5 +12,16 @@ spec:
         operations: ["CREATE", "UPDATE"]
         resources: ["deployments"]
   validations:
-    - message: label 'environment' is required
-      expression: "'environment' in object.metadata.?labels.orValue({})"
+    - message: "required deployment labels are missing: app, environment, owner"
+      expression: >-
+        has(object.metadata.labels) &&
+        'app' in object.metadata.labels &&
+        'environment' in object.metadata.labels &&
+        'owner' in object.metadata.labels
+
+    - message: "required pod labels are missing: app, environment, owner"
+      expression: >-
+        has(object.spec.template.metadata.labels) &&
+        'app' in object.spec.template.metadata.labels &&
+        'environment' in object.spec.template.metadata.labels  &&
+        'owner' in object.spec.template.metadata.labels
