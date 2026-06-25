@@ -125,6 +125,7 @@ jobs:
 
           git add "previews/node-api/pr-${{ github.event.pull_request.number }}.yaml"
 
+          ### Prevents duplicate commits
           if git diff --cached --quiet; then
             echo "No preview changes to commit"
             exit 0
