@@ -1,0 +1,28 @@
+apiVersion: policies.kyverno.io/v1
+kind: ValidatingPolicy
+metadata:
+  name: require-probes
+spec:
+  validationActions:
+    - Audit
+  matchConstraints:
+    resourceRules:
+      - apiGroups:
+          - apps
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - deployments
+          - statefulsets
+          - daemonsets
+  validations:
+    - message: "all containers must define at least one health probe: livenessProbe, readinessProbe, or startupProbe"
+      expression: >-
+        object.spec.template.spec.containers.all(container,
+          has(container.livenessProbe) ||
+          has(container.readinessProbe) ||
+          has(container.startupProbe)
+        )
