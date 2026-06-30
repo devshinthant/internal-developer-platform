@@ -1,0 +1,39 @@
+apiVersion: policies.kyverno.io/v1
+kind: ValidatingPolicy
+metadata:
+  name: validate-probes
+  annotations:
+    policies.kyverno.io/title: Validate Probes
+spec:
+  validationActions:
+    - Audit
+  autogen:
+    podControllers:
+      controllers:
+        - deployments
+        - daemonsets
+        - statefulsets
+        - jobs
+        - cronjobs
+  evaluation:
+    background:
+      enabled: false
+  matchConstraints:
+    resourceRules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        resources:
+          - pods
+        operations:
+          - CREATE
+          - UPDATE
+  validations:
+    - message: "Liveness and readiness probes cannot be the same."
+      expression: >-
+        !object.spec.containers.exists(container,
+          has(container.readinessProbe) &&
+          has(container.livenessProbe) &&
+          container.readinessProbe == container.livenessProbe
+        )
