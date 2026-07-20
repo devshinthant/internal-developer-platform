@@ -6,7 +6,7 @@ metadata:
     policies.kyverno.io/title: Validate Probes
 spec:
   validationActions:
-    - Audit
+    - Deny
   autogen:
     podControllers:
       controllers:

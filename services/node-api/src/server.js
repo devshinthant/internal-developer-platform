@@ -62,7 +62,7 @@ export function createServer() {
 
     if (path === "/say-my-name") {
       json(res,200, {
-        message: "Shin Thant"
+        message: "Shin Thant aka Chopper"
       });
       return;
     }
