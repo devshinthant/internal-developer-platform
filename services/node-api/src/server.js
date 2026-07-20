@@ -41,10 +41,13 @@ export function createServer() {
     }
 
     if (path === "/version") {
+      const demoSecret = process.env.DEMO_SECRET;
       json(res, 200, {
         service: "node-api",
         version: process.env.APP_VERSION ?? "dev",
         commit: process.env.GIT_SHA ?? "local",
+        demoSecretLoaded: Boolean(demoSecret),
+        demoSecretPreview: demoSecret ? `${demoSecret.slice(0, 2)}***(${demoSecret.length} chars)` : null,
         startedAt: startedAt.toISOString(),
       });
       return;
