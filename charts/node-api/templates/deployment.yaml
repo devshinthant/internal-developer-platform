@@ -32,6 +32,9 @@ spec:
                 secretKeyRef:
                   name: node-api-secret
                   key:  DEMO_SECRET
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
           livenessProbe:
             httpGet:
               path: /health
