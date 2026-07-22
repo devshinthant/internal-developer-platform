@@ -1,0 +1,27 @@
+# Rejected example — violates several policies at once, so admission DENIES it.
+# Applied manually (kubectl), NOT reconciled by Argo CD.
+#
+# Expected denials:
+#   - disallow-latest-tag  (image uses :latest)
+#   - require-probes       (no liveness/readiness/startup probe)
+#   - require-resources    (no cpu/memory requests or limits)
+#   - check-labels         (missing environment + owner labels)
+#   - require-non-root / disallow-privilege-escalation (no securityContext)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-rejected
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example-rejected
+  template:
+    metadata:
+      labels:
+        app: example-rejected
+    spec:
+      containers:
+        - name: bad
+          image: nginx:latest

@@ -1,0 +1,50 @@
+# Passing example — satisfies ALL Kyverno policies, so admission ADMITS it.
+# Applied manually (kubectl), NOT reconciled by Argo CD.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-passing
+  namespace: applications
+  labels: # check-labels: app + environment + owner required
+    app: example-passing
+    environment: dev
+    owner: dev-team
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example-passing
+  template:
+    metadata:
+      labels:
+        app: example-passing
+        environment: dev
+        owner: dev-team
+    spec:
+      securityContext:
+        runAsNonRoot: true # require-non-root (pod level)
+      containers:
+        - name: app
+          # NOT ':latest' (disallow-latest-tag) and runs as non-root (unprivileged nginx)
+          image: nginxinc/nginx-unprivileged:1.27-alpine
+          ports:
+            - containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false # disallow-privilege-escalation
+          livenessProbe: # require-probes
+            httpGet:
+              path: /
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5 # differs from liveness -> passes validate-probes
+          resources: # require-resources: requests + limits, cpu + memory
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
