@@ -4,7 +4,7 @@ metadata:
   name: validate-probes
   annotations:
     policies.kyverno.io/title: Validate Probes
-    argocd.argoproj.io/sync-wave: 0 
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   validationActions:
     - Deny

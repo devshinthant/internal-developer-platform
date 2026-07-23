@@ -3,7 +3,7 @@ kind: ValidatingPolicy
 metadata:
   name: check-labels
   annotations:
-    argocd.argoproj.io/sync-wave: 0 
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   validationActions:
     - Deny
