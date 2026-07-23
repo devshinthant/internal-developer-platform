@@ -7,13 +7,22 @@ reconciled by Argo CD (they live outside every Argo-synced path on purpose, so
 a deliberately-broken manifest never puts an Argo app into a permanent
 `OutOfSync` state).
 
-Because the cluster has no local checkout of this repo, apply them straight
-from the GitHub raw URL.
+## Prerequisite: clone the repo on the machine that runs `kubectl`
+
+The cluster has no local checkout of this repo, and it is private, so clone it
+once on the box with cluster access:
+
+```bash
+git clone git@github.com:devshinthant/internal-developer-platform.git
+cd internal-developer-platform
+```
+
+(Later, `git pull` to pick up changes.)
 
 ## Passing — admitted
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/devshinthant/internal-developer-platform/main/examples/passing/good-deployment.yaml
+kubectl apply -f examples/passing/good-deployment.yaml
 ```
 
 Satisfies all policies: required labels, non-`latest` tag, probes (liveness ≠
@@ -23,7 +32,7 @@ readiness), resource requests + limits, `runAsNonRoot`, and
 ## Rejected — denied at admission
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/devshinthant/internal-developer-platform/main/examples/rejected/bad-deployment.yaml
+kubectl apply -f examples/rejected/bad-deployment.yaml
 ```
 
 Denied by Kyverno with messages from `disallow-latest-tag`, `require-probes`,
@@ -32,7 +41,7 @@ Denied by Kyverno with messages from `disallow-latest-tag`, `require-probes`,
 ## Cleanup
 
 ```bash
-kubectl delete -f https://raw.githubusercontent.com/devshinthant/internal-developer-platform/main/examples/passing/good-deployment.yaml --ignore-not-found
+kubectl delete -f examples/passing/good-deployment.yaml --ignore-not-found
 ```
 
 (The rejected deployment is never created, so there is nothing to delete for it.)

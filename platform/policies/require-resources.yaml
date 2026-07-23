@@ -2,6 +2,8 @@ apiVersion: policies.kyverno.io/v1
 kind: ValidatingPolicy
 metadata:
   name: require-resources
+  annotations:
+    argocd.argoproj.io/sync-wave: 0 
 spec:
   validationActions:
     - Deny
@@ -18,7 +20,13 @@ spec:
           - deployments
           - statefulsets 
           - daemonsets
-
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values:
+            - kyverno
+            - kube-system
   validations:
     - message: "all workload containers must define CPU and memory requests and limits"
       expression: >-

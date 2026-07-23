@@ -2,6 +2,8 @@ apiVersion: policies.kyverno.io/v1
 kind: ValidatingPolicy
 metadata:
   name: check-labels
+  annotations:
+    argocd.argoproj.io/sync-wave: 0 
 spec:
   validationActions:
     - Deny
@@ -11,6 +13,13 @@ spec:
         apiVersions: ["v1"]
         operations: ["CREATE", "UPDATE"]
         resources: ["deployments"]
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values:
+            - kyverno
+            - kube-system
   validations:
     - message: "required deployment labels are missing: app, environment, owner"
       expression: >-

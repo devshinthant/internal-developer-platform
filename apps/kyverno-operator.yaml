@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno-operator
+  namespace: argo-cd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"   # operator + CRDs before the CRs
+spec:
+  project: default
+  source:
+    chart: kyverno
+    repoURL: https://kyverno.github.io/kyverno
+    targetRevision: 3.8.1
+    helm:
+      values: |
+        admissionController:
+          container:
+            resources:
+              requests: { cpu: 100m, memory: 128Mi }
+              limits:   { cpu: 100m, memory: 384Mi }
+        backgroundController:
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits:   { cpu: 100m, memory: 384Mi }
+        cleanupController:
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits:   { cpu: 100m, memory: 384Mi }
+        reportsController:
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits:   { cpu: 100m, memory: 384Mi }
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

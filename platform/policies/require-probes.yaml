@@ -2,6 +2,8 @@ apiVersion: policies.kyverno.io/v1
 kind: ValidatingPolicy
 metadata:
   name: require-probes
+  annotations:
+    argocd.argoproj.io/sync-wave: 0 
 spec:
   validationActions:
     - Deny
@@ -18,6 +20,13 @@ spec:
           - deployments
           - statefulsets
           - daemonsets
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values:
+            - kyverno
+            - kube-system
   validations:
     - message: "all containers must define at least one health probe: livenessProbe, readinessProbe, or startupProbe"
       expression: >-

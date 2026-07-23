@@ -4,6 +4,7 @@ metadata:
   name: validate-probes
   annotations:
     policies.kyverno.io/title: Validate Probes
+    argocd.argoproj.io/sync-wave: 0 
 spec:
   validationActions:
     - Deny
@@ -29,6 +30,13 @@ spec:
         operations:
           - CREATE
           - UPDATE
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values:
+            - kyverno
+            - kube-system
   validations:
     - message: "Liveness and readiness probes cannot be the same."
       expression: >-

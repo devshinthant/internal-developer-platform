@@ -5,6 +5,7 @@ metadata:
   annotations:
     policies.kyverno.io/title: Disallow Privilege Escalation in ValidatingPolicy
     policies.kyverno.io/description: Privilege escalation, such as via set-user-ID or set-group-ID file mode, should not be allowed. This policy ensures the `allowPrivilegeEscalation` field is set to `false`.
+    argocd.argoproj.io/sync-wave: 0 
 spec:
   validationActions:
     - Deny 
@@ -30,6 +31,13 @@ spec:
           - UPDATE
         resources:
           - pods
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values:
+            - kyverno
+            - kube-system
   variables:
     - name: allContainers
       expression: object.spec.containers +  object.spec.?initContainers.orValue([]) +  object.spec.?ephemeralContainers.orValue([])
