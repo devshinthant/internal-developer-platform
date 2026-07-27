@@ -9,11 +9,11 @@ a deliberately-broken manifest never puts an Argo app into a permanent
 
 ## Prerequisite: clone the repo on the machine that runs `kubectl`
 
-The cluster has no local checkout of this repo, and it is private, so clone it
-once on the box with cluster access:
+The cluster has no local checkout of this repo, so clone it once on the box with
+cluster access:
 
 ```bash
-git clone git@github.com:devshinthant/internal-developer-platform.git
+git clone https://github.com/devshinthant/internal-developer-platform.git
 cd internal-developer-platform
 ```
 
