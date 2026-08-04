@@ -11,6 +11,8 @@ on:
 permissions:
   contents: read
   packages: write
+  attestations: write
+  id-token: write
 
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository }}/node-api
@@ -75,6 +77,7 @@ jobs:
 
       - name: Push Docker image
         uses: docker/build-push-action@v6
+        id: push-image
         with:
           context: services/node-api
           push: true
@@ -84,3 +87,23 @@ jobs:
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.IMAGE_NAME }}@${{ steps.push-image.outputs.digest }}
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
+          format: spdx-json
+          output-file: node-api.sbom.spdx.json
+          artifact-name: node-api-sbom-${{ github.sha }}.spdx.json
+          upload-artifact: true
+
+      - name: Attest SBOM to image
+        uses: actions/attest@v4
+        with:
+          subject-name: ${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push-image.outputs.digest }}
+          sbom-path: node-api.sbom.spdx.json
+          push-to-registry: true
+
